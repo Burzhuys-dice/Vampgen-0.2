@@ -34,12 +34,36 @@
         <h1>VtM 5e: Генератор Персонажа</h1>
         <div id="message-box"></div>
 
-        <div id="concept-container" style="margin-bottom: 20px; padding: 10px; border: 1px solid #444;">
-            <h3>Концепт</h3>
-            <label for="clan-select">Клан:</label>
-            <select id="clan-select">
-                <option value="">-- Оберіть клан --</option>
-            </select>
+         <div id="concept-container" style="margin-bottom: 20px; padding: 15px; border: 1px solid #444; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #222;">
+            <h3 style="grid-column: span 2; margin-top: 0;">Концепт</h3>
+            
+            <div>
+                <label for="char-name">Ім'я персонажа:</label>
+                <input type="text" id="char-name" placeholder="Наприклад: Джек" style="width: 100%; padding: 5px; box-sizing: border-box; background: #333; color: white; border: 1px solid #555;">
+            </div>
+            
+            <div>
+                <!-- Пустий блок для балансу сітки (сюди можна додати Літопис/Chronicle) -->
+            </div>
+
+            <div>
+                <label for="clan-select">Клан:</label>
+                <select id="clan-select" style="width: 100%; padding: 5px; box-sizing: border-box; background: #333; color: white; border: 1px solid #555;">
+                    <option value="">-- Оберіть клан --</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="predator-select">Тип Хижака:</label>
+                <select id="predator-select" style="width: 100%; padding: 5px; box-sizing: border-box; background: #333; color: white; border: 1px solid #555;">
+                    <option value="">-- Оберіть тип хижака --</option>
+                </select>
+            </div>
+            
+            <!-- Блок для виводу інформації про хижака -->
+            <div id="predator-info" style="grid-column: span 2; font-size: 0.9em; color: #aaa; min-height: 20px; border-top: 1px dashed #444; padding-top: 10px;">
+                <!-- Сюди генеруватиметься опис бонусів -->
+            </div>
         </div>
 
         <div id="attributes-section">
