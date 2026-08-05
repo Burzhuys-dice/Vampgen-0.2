@@ -31,10 +31,12 @@ export const TRANSLATIONS = {
 // Базові ліміти створення персонажа V5
 export const V5_RULES = {
     minAttribute: 1, // Кожен атрибут стартує мінімум з 1
-    maxAttribute: 4  // Максимум на старті без переваг
+    maxAttribute: 4, // Максимум на старті без переваг
+    // Допустимі кількості кожного рівня точок для 9 атрибутів: один '4', три '3', чотири '2', один '1'
+    attributePoolPattern: [1, 3, 4, 1] 
 };
 
-// Перевірка валідності кліку на атрибут
+// Перевірка валідності кліку на атрибут з урахуванням лімітів пулу
 export function validateAttributeUpgrade(traitName, targetValue) {
     if (targetValue < V5_RULES.minAttribute) {
         return { valid: false, message: "Атрибут не може бути нижче 1." };
@@ -42,7 +44,25 @@ export function validateAttributeUpgrade(traitName, targetValue) {
     if (targetValue > V5_RULES.maxAttribute) {
         return { valid: false, message: "На етапі створення персонажа атрибут не може перевищувати 4." };
     }
-    
-    // Додатково тут можна буде перевіряти пули розподілу (наприклад, одне правило на 4, три на 3 тощо)
+
+    // Збираємо поточні значення всіх атрибутів (крім того, що редагується зараз)
+    const currentAttributes = { ...characterState.attributes };
+    currentAttributes[traitName] = targetValue;
+
+    // Рахуємо кількість кожного значення (від 1 до 4)
+    const counts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    for (const attr in currentAttributes) {
+        const val = currentAttributes[attr];
+        if (counts[val] !== undefined) {
+            counts[val]++;
+        }
+    }
+
+    // Перевіряємо суворі ліміти V5 (1х4, 3х3, 4х2, 1х1)
+    if (counts[4] > 1) return { valid: false, message: "Дозволено лише один атрибут на рівні 4." };
+    if (counts[3] > 3) return { valid: false, message: "Дозволено максимум три атрибути на рівні 3." };
+    if (counts[2] > 4) return { valid: false, message: "Дозволено максимум чотири атрибути на рівні 2." };
+    if (counts[1] > 1) return { valid: false, message: "Лише один атрибут може залишатися на рівні 1." };
+
     return { valid: true };
 }
