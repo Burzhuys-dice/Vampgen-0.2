@@ -1,20 +1,21 @@
-mport { initUI, populateClansUI, renderCoreTraits } from './ui.js'; // Додано імпорт
+import { initUI, populateClansUI, populatePredatorsUI, renderCoreTraits } from './ui.js'; 
 import { characterState } from './state.js';
-import { loadClans } from './dataLoader.js';
+import { loadClans, loadPredatorTypes } from './dataLoader.js'; // Додали імпорт
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Ініціалізуємо базові слухачі
     initUI();
-    
-    // 2. Генеруємо лист персонажа (Атрибути та Навички)
     renderCoreTraits(); 
     
-    // 3. Асинхронно завантажуємо дані
     console.log("Завантаження ігрових даних...");
-    const clans = await loadClans();
     
-    // 4. Передаємо завантажені дані в UI
+    // Завантажуємо обидва файли одночасно для швидкості
+    const [clans, predators] = await Promise.all([
+        loadClans(),
+        loadPredatorTypes()
+    ]);
+    
     populateClansUI(clans);
+    populatePredatorsUI(predators); // Передаємо хижаків у UI
     
     console.log("VtM 5e Character Creator готовий.");
 });
