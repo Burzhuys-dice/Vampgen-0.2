@@ -1,9 +1,13 @@
-import { updateTrait, updateClan, characterState } from './state.js';
-import { validateAttributeUpgrade, TRAITS_LIST, TRANSLATIONS } from './rules.js'; // Додано нові імпорти
+import { updateTrait, updateClan, updateConcept, characterState } from './state.js'; // Додано updateConcept
+import { validateAttributeUpgrade, TRAITS_LIST, TRANSLATIONS } from './rules.js';
 import { gameData } from './dataLoader.js';
 
 const messageBox = document.getElementById('message-box');
 const clanSelect = document.getElementById('clan-select');
+// Нові змінні DOM
+const predatorSelect = document.getElementById('predator-select');
+const charNameInput = document.getElementById('char-name');
+const predatorInfo = document.getElementById('predator-info');
 
 // Універсальна функція створення треку з кружечками
 function createDotTrack(label, category, traitName, maxDots = 5) {
@@ -57,13 +61,24 @@ export function initUI() {
     if (clanSelect) {
         clanSelect.addEventListener('change', (e) => updateClan(e.target.value));
     }
+ // Нові слухачі подій для Концепту
+    if (predatorSelect) {
+        predatorSelect.addEventListener('change', (e) => updateConcept('predatorType', e.target.value));
+    }
+    if (charNameInput) {
+        charNameInput.addEventListener('input', (e) => updateConcept('name', e.target.value));
+    }
 
+    // Розширений обробник змін стану
     document.addEventListener('stateChanged', (e) => {
         if (['attributes', 'skills', 'disciplines'].includes(e.detail.type)) {
             renderDots(e.detail.trait, e.detail.value);
         }
         if (e.detail.type === 'clan') {
             renderClanDisciplines(e.detail.value);
+        }
+        if (e.detail.type === 'concept' && e.detail.field === 'predatorType') {
+            renderPredatorInfo(e.detail.value);
         }
     });
 }
@@ -103,6 +118,32 @@ function renderDots(trait, value) {
         const dotVal = parseInt(dot.dataset.value);
         dot.classList.toggle('filled', dotVal <= value);
     });
+}
+export function populatePredatorsUI(predatorsArray) {
+    if (!predatorSelect) return;
+    predatorsArray.forEach(pred => {
+        const option = document.createElement('option');
+        option.value = pred.name;
+        option.textContent = pred.name; // Якщо у JSON є переклад, можна юзати pred.name_uk
+        predatorSelect.appendChild(option);
+    });
+}
+
+function renderPredatorInfo(predatorName) {
+    if (!predatorName) {
+        predatorInfo.innerHTML = '';
+        return;
+    }
+    
+    const predData = gameData.predatorTypes.find(p => p.name === predatorName);
+    if (predData) {
+        // Структура залежить від вашого JSON. Це базовий приклад:
+        let infoHtml = `<strong>Бонуси Хижака (${predatorName}):</strong><br>`;
+        if (predData.disciplines) infoHtml += `<em>Дисципліни (на вибір):</em> ${predData.disciplines.join(' або ')}<br>`;
+        if (predData.specialties) infoHtml += `<em>Спеціалізації:</em> ${predData.specialties.join(', ')}<br>`;
+        // Якщо у JSON є загальне поле 'description', можна просто вивести його
+        predatorInfo.innerHTML = infoHtml;
+    }
 }
 
 // Функція для побудови сітки характеристик (Атрибутів або Навичок)
