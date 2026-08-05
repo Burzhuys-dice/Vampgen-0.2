@@ -13,43 +13,43 @@
     </style>
 </head>
 <body>
-    <h1>VtM 5e: Генератор Персонажа</h1>
-    <div id="message-box"></div>
+    <div id="app-container">
+        <h1>VtM 5e: Генератор Персонажа</h1>
+        <div id="message-box"></div>
 
-    <div id="concept-container" style="margin-bottom: 20px; padding: 10px; border: 1px solid #444;">
-    <h3>Концепт</h3>
-    <label for="clan-select">Клан:</label>
-    <select id="clan-select">
-        <option value="">-- Оберіть клан --</option>
-    </select>
-</div>
-    
-    <div id="attributes-container">
-        <h3>Атрибути</h3>
-        <!-- Приклад двох атрибутів. Зверніть увагу на data-attr та data-value -->
-        <div class="attribute-row">
-            <span>Міць (Strength)</span>
-            <div class="dot-track">
-                <div class="dot filled" data-attr="strength" data-value="1"></div>
-                <div class="dot" data-attr="strength" data-value="2"></div>
-                <div class="dot" data-attr="strength" data-value="3"></div>
-                <div class="dot" data-attr="strength" data-value="4"></div>
-                <div class="dot" data-attr="strength" data-value="5"></div>
-            </div>
+        <div id="concept-container" style="margin-bottom: 20px; padding: 10px; border: 1px solid #444;">
+            <h3>Концепт</h3>
+            <label for="clan-select">Клан:</label>
+            <select id="clan-select">
+                <option value="">-- Оберіть клан --</option>
+            </select>
         </div>
-        <div class="attribute-row">
-            <span>Спритність (Dexterity)</span>
-            <div class="dot-track">
-                <div class="dot filled" data-attr="dexterity" data-value="1"></div>
-                <div class="dot" data-attr="dexterity" data-value="2"></div>
-                <div class="dot" data-attr="dexterity" data-value="3"></div>
-                <div class="dot" data-attr="dexterity" data-value="4"></div>
-                <div class="dot" data-attr="dexterity" data-value="5"></div>
+
+        <div id="attributes-container">
+            <h3>Атрибути</h3>
+            <!-- Оновлені data-атрибути -->
+            <div class="attribute-row">
+                <span>Міць (Strength)</span>
+                <div class="dot-track">
+                    <div class="dot filled" data-category="attributes" data-trait="strength" data-value="1"></div>
+                    <div class="dot" data-category="attributes" data-trait="strength" data-value="2"></div>
+                    <div class="dot" data-category="attributes" data-trait="strength" data-value="3"></div>
+                    <div class="dot" data-category="attributes" data-trait="strength" data-value="4"></div>
+                    <div class="dot" data-category="attributes" data-trait="strength" data-value="5"></div>
+                </div>
+            </div>
+            <!-- Сюди можна додати інші атрибути за аналогією -->
+        </div>
+
+        <div id="disciplines-container" style="margin-top: 20px;">
+            <h3>Дисципліни (Disciplines)</h3>
+            <div id="disciplines-list">
+                <!-- Сюди будуть генеруватися дисципліни клану -->
+                <p style="color: #888; font-size: 0.9em;">Оберіть клан, щоб побачити доступні дисципліни.</p>
             </div>
         </div>
     </div>
 
-    <!-- Головний файл скрипта як модуль -->
     <script type="module" src="./js/main.js"></script>
 </body>
 </html>
