@@ -22,3 +22,11 @@ export function updateTrait(category, trait, value) {
         detail: { type: category, trait: trait, value: value } 
     });
 }
+
+export function updateConcept(field, value) {
+    characterState.concept[field] = value;
+    
+    document.dispatchEvent(new CustomEvent('stateChanged', { 
+        detail: { type: 'concept', field: field, value: value } 
+    }));
+}
