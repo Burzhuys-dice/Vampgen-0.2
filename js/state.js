@@ -30,3 +30,12 @@ export function updateAttribute(attr, value) {
     });
     document.dispatchEvent(event);
 }
+export function updateClan(clanName) {
+    characterState.concept.clan = clanName;
+    
+    // Сповіщаємо систему, що клан змінився (щоб UI міг показати кланові дисципліни тощо)
+    const event = new CustomEvent('stateChanged', { 
+        detail: { type: 'clan', value: clanName } 
+    });
+    document.dispatchEvent(event);
+}
