@@ -1,6 +1,6 @@
 import { updateTrait, updateClan, characterState } from './state.js';
-import { validateAttributeUpgrade } from './rules.js';
-import { gameData } from './dataLoader.js'; // Імпортуємо кеш даних
+import { validateAttributeUpgrade, TRAITS_LIST, TRANSLATIONS } from './rules.js'; // Додано нові імпорти
+import { gameData } from './dataLoader.js';
 
 const messageBox = document.getElementById('message-box');
 const clanSelect = document.getElementById('clan-select');
@@ -102,5 +102,42 @@ function renderDots(trait, value) {
     dots.forEach(dot => {
         const dotVal = parseInt(dot.dataset.value);
         dot.classList.toggle('filled', dotVal <= value);
+    });
+}
+
+// Функція для побудови сітки характеристик (Атрибутів або Навичок)
+export function renderCoreTraits() {
+    const categories = ['physical', 'social', 'mental'];
+    const categoryNames = { physical: 'Фізичні', social: 'Соціальні', mental: 'Ментальні' };
+
+    // 1. Генеруємо Атрибути
+    const attrGrid = document.getElementById('attributes-grid');
+    attrGrid.innerHTML = ''; // Очищаємо
+    categories.forEach(cat => {
+        const col = document.createElement('div');
+        col.className = 'trait-column';
+        col.innerHTML = `<h4>${categoryNames[cat]}</h4>`;
+        
+        TRAITS_LIST.attributes[cat].forEach(attr => {
+            const label = TRANSLATIONS[attr] || attr;
+            // Атрибути за замовчуванням мають 1 точку мінімум
+            col.appendChild(createDotTrack(label, 'attributes', attr, 5));
+        });
+        attrGrid.appendChild(col);
+    });
+
+    // 2. Генеруємо Навички
+    const skillsGrid = document.getElementById('skills-grid');
+    skillsGrid.innerHTML = '';
+    categories.forEach(cat => {
+        const col = document.createElement('div');
+        col.className = 'trait-column';
+        col.innerHTML = `<h4>${categoryNames[cat]}</h4>`;
+        
+        TRAITS_LIST.skills[cat].forEach(skill => {
+            const label = TRANSLATIONS[skill] || skill;
+            col.appendChild(createDotTrack(label, 'skills', skill, 5));
+        });
+        skillsGrid.appendChild(col);
     });
 }
