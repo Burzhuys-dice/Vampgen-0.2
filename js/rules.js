@@ -1,23 +1,5 @@
 import { characterState } from './state.js';
 
-// Константи з правилами
-export const V5_RULES = {
-    maxAttributeStart: 4,
-    minAttributeStart: 1
-};
-
-// Функція валідації: чи можна поставити таку кількість точок?
-export function validateAttributeUpgrade(attr, newValue) {
-    if (newValue > V5_RULES.maxAttributeStart) {
-        return { valid: false, message: "На старті атрибут не може бути вище 4." };
-    }
-    if (newValue < V5_RULES.minAttributeStart) {
-        return { valid: false, message: "Атрибут не може бути нижче 1." };
-    }
-    
-    // Тут можна додати перевірку на кількість доступних точок для розподілу
-    return { valid: true };
-};
 // Структура всіх характеристик за категоріями
 export const TRAITS_LIST = {
     attributes: {
@@ -32,13 +14,11 @@ export const TRAITS_LIST = {
     }
 };
 
-// Словник перекладу (на основі вашого файлу)
+// Словник перекладу
 export const TRANSLATIONS = {
-    // Атрибути
     strength: 'Міць', dexterity: 'Спритність', stamina: 'Витривалість', 
     charisma: 'Харизма', manipulation: 'Маніпуляція', composure: 'Витримка', 
     intelligence: 'Інтелект', wits: 'Кмітливість', resolve: 'Рішучість',
-    // Навички
     athletics: 'Атлетика', brawl: 'Боротьба', craft: 'Ремесло', drive: 'Керування', 
     firearms: 'Стрільба', melee: 'Рукопашний бій', larceny: 'Крадійство', stealth: 'Непомітність', 
     survival: 'Виживання', animal_ken: 'Розуміння тварин', etiquette: 'Етикет', insight: 'Проникливість', 
@@ -46,4 +26,23 @@ export const TRANSLATIONS = {
     streetwise: 'Вуличний досвід', subterfuge: 'Хитрість', academics: 'Знання', awareness: 'Спостережливість', 
     finance: 'Фінанси', investigation: 'Розслідування', medicine: 'Медицина', occult: 'Окультизм', 
     politics: 'Політика', science: 'Наука', technology: 'Технології'
+};
+
+// Базові ліміти створення персонажа V5
+export const V5_RULES = {
+    minAttribute: 1, // Кожен атрибут стартує мінімум з 1
+    maxAttribute: 4  // Максимум на старті без переваг
+};
+
+// Перевірка валідності кліку на атрибут
+export function validateAttributeUpgrade(traitName, targetValue) {
+    if (targetValue < V5_RULES.minAttribute) {
+        return { valid: false, message: "Атрибут не може бути нижче 1." };
+    }
+    if (targetValue > V5_RULES.maxAttribute) {
+        return { valid: false, message: "На етапі створення персонажа атрибут не може перевищувати 4." };
+    }
+    
+    // Додатково тут можна буде перевіряти пули розподілу (наприклад, одне правило на 4, три на 3 тощо)
+    return { valid: true };
 }
