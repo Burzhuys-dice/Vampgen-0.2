@@ -1,12 +1,17 @@
-import { initUI } from './ui.js';
+import { initUI, populateClansUI } from './ui.js';
 import { characterState } from './state.js';
+import { loadClans } from './dataLoader.js'; // Імпортуємо завантажувач
 
-// Чекаємо повного завантаження DOM
-document.addEventListener('DOMContentLoaded', () => {
-    // Ініціалізуємо інтерфейс
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Ініціалізуємо базові слухачі подій інтерфейсу
     initUI();
     
-    // Тут у майбутньому можна додати виклик dataLoader.js 
-    // для завантаження кланів та дисциплін
-    console.log("VtM 5e Character Creator завантажено. Початковий стан:", characterState);
+    // 2. Асинхронно завантажуємо дані
+    console.log("Завантаження ігрових даних...");
+    const clans = await loadClans();
+    
+    // 3. Передаємо завантажені дані в UI
+    populateClansUI(clans);
+    
+    console.log("VtM 5e Character Creator готовий. Початковий стан:", characterState);
 });
